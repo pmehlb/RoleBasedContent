@@ -1,0 +1,15 @@
+{
+	"name": "Role-Based Content Display",
+	"author": "Patrick Mehlbaum",
+	"url": "https://patrickm.xyz",
+	"description": "This extension is a test for now.",
+	"version": "1.0.0",
+	"type": "validextensionclass",
+	"manifest_version": 1,
+	"AutoloadNamespaces": {
+		"MediaWiki\\Extension\\RoleBasedContent\\": "includes/"
+	},
+	"Hooks": {
+		"ParserFirstCallInit": "MediaWiki\\Extension\\RoleBasedContent\\PageHook"
+	}
+}
