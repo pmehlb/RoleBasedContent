@@ -21,7 +21,7 @@ class PageHook implements \MediaWiki\Hook\BeforePageDisplayHook {
 	public function onBeforePageDisplay($out, $skin) : void {
 		// get body content text
 		$page = $out->getHTML();
-		$groups = User::getGroupMemberships();
+		//$groups = User::getGroupMemberships();
 		
 		foreach ($groups as $group) {
 			file_put_contents("dump.txt", $group->getGroup, FILE_APPEND);
