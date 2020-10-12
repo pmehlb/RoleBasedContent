@@ -6,23 +6,30 @@ if (!defined( 'MEDIAWIKI')) {
 	die(-1);
 }
 
-// set MediaWiki settings
+// set MediaWiki settings and hooks
 $wgExtensionCredits['parserhook'][] = array(
-	'path'           => __FILE__,
-	'name'           => 'Role-Based Content',
-	'version'        => '1.0.1',
-	'author'         => 'Patrick Mehlbaum', 
-	'url'            => 'https://patrickm.xyz',
-	'description'    => 'This extension is an example and performs no discernible function'
+	"path"			=> __FILE__,
+	"name"			=> "Role-Based Content",
+	"version"		=> "1.0.1",
+	"author"		=> "Patrick Mehlbaum", 
+	"url"			=> "https://patrickm.xyz",
+	"description"	=> "This extension allows you to restrict page content based on a user's role."
 );
-$wgHooks['ParserFirstCallInit'][] = 'onParserFirstCallInit';
+$wgHooks["ParserFirstCallInit"][] = "onParserFirstCallInit";
+$wgHooks["OutputPageBeforeHTML"][] = "onOutputPageBeforeHTML";
 // disable caching so that users only see what they're supposed to and not what the last person saw
 $wgParserCacheType = CACHE_NONE;
 $wgCachePages = false;
 
 function onParserFirstCallInit($parser) {
 	// set the parser to watch for <RoleContent> blocks, and call renderRoleContent() as a callback
-	$parser->setHook('RoleContent', 'renderRoleContent');
+	$parser->setHook("RoleContent", "renderRoleContent");
+}
+
+function onOutputPageBeforeHTML(OutputPage $out, &$text) {
+	// add our custom JS script
+	// https://doc.wikimedia.org/mediawiki-core/master/php/classOutputPage.html#a17767a6aa7eb32cc60b29cf081b9adb2
+	$out->addScriptFile('./extensions/RoleBasedContent/rbc.js');
 }
 
 function renderRoleContent($block, array $args, Parser $parser, PPFrame $frame) {
@@ -54,7 +61,7 @@ function renderRoleContent($block, array $args, Parser $parser, PPFrame $frame) 
 	
 	// check if viewer is logged in, return nothing if they're not
 	if (empty($api_response["query"]["userinfo"]["id"])) {
-		return false;
+		return true;
 	}
 	
 	// array with a list of user's groups
@@ -78,11 +85,7 @@ function renderRoleContent($block, array $args, Parser $parser, PPFrame $frame) 
 	}
 	
 	// if $show is true, show them the content along with the <br> removal tag
-	if ($show) {
-		return '<!--REMOVE-->' . $block;
-	} else {
-		return false;
-	}
+	return ($show) ? '<!--RBC:REMOVE-->'. $block : true;
 }
 
 function handleAPIRequest(array $param) : array {
