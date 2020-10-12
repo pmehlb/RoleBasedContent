@@ -1,0 +1,36 @@
+it'd be nice to remove all the extra <br> tags
+
+perhaps i can add a js module through a MediaWikiService instance or something
+or just insert a <script> tag using a session variable to only have it happen once?
+maybe a <RemoveEmptyContent> tag that returns a script at end of page?
+
+load a simple js file that looks for certain data tags (?) or comments
+
+remove the comment and the associated <br> before/after (check if the immediate neighbors are <br>s since it pads both sides with it
+
+only if logged in?
+
+add "remove br" data tag before and after the data (return $br_tag . $block . $br_tag)
+
+testing
+-------------
+the new lines show up like this
+
+<p>line 1 content</p>
+<p><!-- group content for '1' -->role content 1</p>
+<p><br>\n<!-- group content for '2' -->role content 2</p>
+<p><br>\n<!-- group content for '3' -->role content 3</p>
+<p><br>\n<!-- group content for '4' -->role content 4</p>
+...
+
+for no role content showing, this jQuery works:
+
+$('p br:only-child').each(function(i, el) {
+    if ($(el).parent().html() === "<br>\n") { $(this).parent().remove(); }
+});
+
+for a role showing:
+
+$('p br:only-child').each(function(i, el) {
+    if ($(this).parent().html().includes("<br>\n<")) { console.log("delete this br"); } 
+});

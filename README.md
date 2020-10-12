@@ -1,9 +1,28 @@
-# RoleBasedContent Extension
+# Role-Based Content
+Heyo! This MediaWiki extension allows you to restrict what a user sees on a central wiki page, all based on their group! The syntax is dead simple, and I even put in the effort to try and remove any exploits of the extension (how nice of me!). To use the extension, first add it to the `LocalSettings.php` config file in the root install folder:
+```php
+require_once "$IP/extensions/RoleBasedContent/Hook.php";
+```
 
-MediaWiki extension to display content on the page based on a user's role.
+To add role-based content to a page, just enclose the content with a `<RoleContent>` tag. For example:
+```markdown
+<RoleContent group="1">
+# Group 1
+Only group 1 can see this content!
+</RoleContent>
+```
 
-Instead of displaying all content, then using CSS to hide certain parts of the page, this extension allows you to specify in the editor which roles can see what content.
+You can even specify multiple groups by doing this (the space between is optional):
+```markdown
+<RoleContent group="1,2">
+# Groups 1 and 2
+Both groups 1 and 2 can see this!
+</RoleContent>
+```
 
-This extension makes use of the MediaWiki hooks `onBeforePageDisplay` and `onBeforeParserInit`.
+There ya' go! Use at your own discretion, and be careful, groups **are** case sensitive.
 
-In the editor, specify a role-based access block by opening it with `<RoleContent group="GROUP">` and closing it with `</RoleContent>`.
+---
+Current to do's:
+- [ ] Add JS module to remove starting `<br>` tags (so the user doesn't see that content was removed, and so it doesn't look ugly)
+  - [x] Find jQuery to actually make it work (see notes.txt)
