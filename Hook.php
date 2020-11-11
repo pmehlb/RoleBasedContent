@@ -6,13 +6,20 @@ if (!defined( 'MEDIAWIKI')) {
 	die(-1);
 }
 
+/* ---------- settings ---------- */
+// allow SysOp users to view all content regardless of whether they're mentioned in the group parameter?
+$sysop_override = true;
+// error message if no group parameter is specified in the <RoleContent>
+$error_msg = 'Group parameter not specified.';
+/* ---------- /settings ---------- */
+
 // set MediaWiki settings and hooks
 $wgExtensionCredits['parserhook'][] = array(
-	"path"			=> __FILE__,
-	"name"			=> "Role-Based Content",
-	"version"		=> "1.0.1",
-	"author"		=> "Patrick Mehlbaum", 
-	"url"			=> "https://patrickm.xyz",
+	"path"		=> __FILE__,
+	"name"		=> "Role-Based Content",
+	"version"	=> "1.0.1",
+	"author"	=> "Patrick Mehlbaum", 
+	"url"		=> "https://patrickm.xyz",
 	"description"	=> "This extension allows you to restrict page content based on a user's role."
 );
 $wgHooks["ParserFirstCallInit"][] = "onParserFirstCallInit";
@@ -43,7 +50,7 @@ function renderRoleContent($block, array $args, Parser $parser, PPFrame $frame) 
 	// get the <RoleContent> group parameter, escape html, and check validity
 	$group = strtolower(htmlspecialchars($args["group"] ?? null, ENT_QUOTES));
 	if (is_null($group) || empty($group)) {
-		return '<strong><span style="color: red">Group parameter not specified.</span></strong>';
+		return '<strong><span style="color: red">' . $error_msg . '</span></strong>';
 	}
 	
 	/* API parameters sourced from
@@ -71,7 +78,7 @@ function renderRoleContent($block, array $args, Parser $parser, PPFrame $frame) 
 	$show = false;
 	
 	// check if user is SysOp
-	if (in_array("sysop", $groups)) { $show = true; }
+	if (in_array("sysop", $groups) && $sysop_override) { $show = true; }
 	// check if user is in specified group
 	else if (in_array($group, $groups)) { $show = true; }
 	// check if the group specified contains an array of allowed groups
@@ -85,7 +92,7 @@ function renderRoleContent($block, array $args, Parser $parser, PPFrame $frame) 
 	}
 	
 	// if $show is true, show them the content along with the <br> removal tag
-	return ($show) ? '<!--RBC:REMOVE-->'. $block : true;
+	return ($show) ? '<!--RBC:REMOVE-->' . $block : true;
 }
 
 function handleAPIRequest(array $param) : array {
