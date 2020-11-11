@@ -16,11 +16,13 @@ Only group 1 can see this content!
 
 You can even specify multiple groups by doing this (the space between is optional):
 ```html
-<RoleContent group="1,2">
-# Groups 1 and 2
-Both groups 1 and 2 can see this!
+<RoleContent group="1,2, 3">
+# Groups 1, 2, and 3
+Groups 1, 2, and (you guessed it!) 3 can see this!
 </RoleContent>
 ```
+
+Additionally, 
 
 There ya' go! Use at your own discretion, and be careful, groups **are** case sensitive.
 
