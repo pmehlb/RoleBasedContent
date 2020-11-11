@@ -26,5 +26,9 @@ There ya' go! Use at your own discretion, and be careful, groups **are** case se
 
 ---
 Current to do's:
-- [ ] Add JS module to remove starting `<br>` tags (so the user doesn't see that content was removed, and so it doesn't look ugly)
+- [x] Add JS module to remove starting `<br>` tags (so the user doesn't see that content was removed, and so it doesn't look ugly)
   - [x] Find jQuery to actually make it work (see notes.txt)
+- [x] Add support for multiple groups
+
+Current suggestions:
+- [ ] Allow users of higher rank to view lower rank content (MediaWiki doesn't store permissions in a way that's easy to compare...)
