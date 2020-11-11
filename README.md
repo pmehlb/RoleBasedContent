@@ -7,7 +7,7 @@ require_once "$IP/Path/To/Hook.php";
 ```
 
 To add role-based content to a page, just enclose the content with a `<RoleContent>` tag. For example:
-```markdown
+```html
 <RoleContent group="1">
 # Group 1
 Only group 1 can see this content!
@@ -15,7 +15,7 @@ Only group 1 can see this content!
 ```
 
 You can even specify multiple groups by doing this (the space between is optional):
-```markdown
+```html
 <RoleContent group="1,2">
 # Groups 1 and 2
 Both groups 1 and 2 can see this!
